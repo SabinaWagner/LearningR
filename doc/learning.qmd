@@ -1,0 +1,28 @@
+---
+title: "Reproducible document"
+author: "Sabina Wagner"
+format: html
+---
+## Setup code chunk
+
+```{r setup}
+library(tidyverse)
+```
+
+## About me
+
+- Sabina Wagner
+- National Institute of Public Health, SDU
+
+I am a phd student, working within the area of **stigma** related to *diabetes* and *overweight*
+
+## Simple code
+
+```{r}
+3 * 3
+```
+
+# Other markdown
+I can also write superscript^1^ and subscript~2~
+
+
