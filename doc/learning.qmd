@@ -29,3 +29,6 @@ I can also write superscript^1^ and subscript~2~
 ## Git testing
 
 Here is something that I have added to this document, and that I want to commit to git.
+
+I am now making a second change, that I will also commit.
+
