@@ -7,6 +7,9 @@ format: html
 
 ```{r setup}
 library(tidyverse)
+post_meal_data <- read_csv2(
+    here::here("data/post-meal-insulin.csv")
+)
 ```
 
 ## About me
@@ -31,4 +34,13 @@ I can also write superscript^1^ and subscript~2~
 Here is something that I have added to this document, and that I want to commit to git.
 
 I am now making a second change, that I have committed.
+
+## Showing the data
+
+```{r}
+post_meal_data
+```
+```{r}
+glimpse(post_meal_data)
+```
 
