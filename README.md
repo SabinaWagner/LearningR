@@ -1,5 +1,7 @@
 # LearningR: Introduction to R
 
+Here is a random sentence I have added
+
 TODO: Give a brief description of what your project is about
 
 This project...
