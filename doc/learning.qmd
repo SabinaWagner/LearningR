@@ -10,7 +10,7 @@ format: html
 #| warning: false
 library(tidyverse)
 post_meal_data <- read_csv2(
-    here::here("data/post-meal-insulin.csv")
+  here::here("data/post-meal-insulin.csv")
 )
 ```
 
@@ -48,15 +48,15 @@ glimpse(post_meal_data)
 ## Plots
 
 ```{r}
-ggplot(post_meal_data,aes(x=BMI)) + 
-    geom_histogram()
+ggplot(post_meal_data, aes(x = BMI)) +
+  geom_histogram()
 ```
 
 ```{r}
 #| fig-cap: "Distribution of BMI"
 #| label: fig-bmi-histogram
-ggplot(post_meal_data, aes(x = BMI)) + 
-    geom_histogram()
+ggplot(post_meal_data, aes(x = BMI)) +
+  geom_histogram()
 ```
 
 Here is the distribution (see @fig-bmi-histogram)
@@ -75,14 +75,37 @@ See @fig-group above for a cool plot!
 ## Plotting two discrete variables
 
 ```{r}
-post_meal_data |> 
-    ggplot(aes(x = Group, fill = as.character(glykemi))) + 
-    geom_bar()
+post_meal_data |>
+  ggplot(aes(x = Group, fill = as.character(glykemi))) +
+  geom_bar()
 ```
 
 ```{r}
-post_meal_data |> 
-    ggplot(aes(x = Group, fill = as.character(glykemi))) + 
-    geom_bar(position = position_dodge())
+post_meal_data |>
+  ggplot(aes(x = Group, fill = as.character(glykemi))) +
+  geom_bar(position = position_dodge())
+```
+
+## Putting two plots side by side
+
+```{r}
+#| label: fig-bmi-group
+#| fig-cap: "BMI and group, side by side"
+#| fig-subcap:
+#|  - "Distribution of BMI"
+#|  - "Group size"
+#| layout-ncol: 2
+ggplot(post_meal_data, aes(x = BMI)) +
+  geom_histogram()
+ggplot(post_meal_data, aes(x = Group)) +
+  geom_bar()
+```
+## Plotting two continuous variables
+
+```{r}
+#| label: fig-bmi-aucpg
+#| fig-cap: "BMI by area under curve glucose"
+ggplot(post_meal_data, aes(x= BMI, y=auc_pg)) +
+    geom_smooth() + geom_point()
 ```
 
