@@ -45,6 +45,8 @@ post_meal_data
 ```{r}
 glimpse(post_meal_data)
 ```
+## Plots
+
 ```{r}
 ggplot(post_meal_data,aes(x=BMI)) + 
     geom_histogram()
@@ -58,3 +60,14 @@ ggplot(post_meal_data, aes(x = BMI)) +
 ```
 
 Here is the distribution (see @fig-bmi-histogram)
+
+## Exercise: Discrete plots
+
+```{r}
+#| fig-cap: "Groups"
+#| label: fig-group
+ggplot(post_meal_data, aes(x = Group)) +
+  geom_bar()
+```
+
+See @fig-group above for a cool plot!
