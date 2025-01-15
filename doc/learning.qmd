@@ -108,4 +108,6 @@ ggplot(post_meal_data, aes(x = Group)) +
 ggplot(post_meal_data, aes(x= BMI, y=auc_pg)) +
     geom_smooth() + geom_point()
 ```
+## Pushing changes to remote 
+
 
