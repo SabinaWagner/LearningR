@@ -111,7 +111,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/post-meal-insulin.csv"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>small_post_meal_data <span class="ot">&lt;-</span> <span class="fu">select</span>(post_meal_data, id, Age, BMI, Group, auc_pg, auc_ins, glykemi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>small_post_meal_data <span class="ot">&lt;-</span> <span class="fu">select</span>(post_meal_data, id, Age, BMI, Group, auc_pg, auc_ins, glykemi)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>tidier_post_meal_data <span class="ot">&lt;-</span> small_post_meal_data <span class="sc">|&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">auc_glucose =</span> auc_pg,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">auc_insulin =</span> auc_ins</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(glykemi <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>glykemi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="about-me" class="level2">
@@ -612,22 +620,22 @@ Figure&nbsp;4: BMI by area under curve glucose
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">".."</span>), <span class="sc">-</span><span class="fu">contains</span>(<span class="st">"..."</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">P.Glucose.minus5.OGTT =</span> P.Glucose..<span class="fl">5.</span>OGTT,</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Insulin.minus5.OGTT =</span> Insulin..<span class="fl">5.</span>OGTT.X</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Insulin.minus5.OGTT.X =</span> Insulin..<span class="fl">5.</span>OGTT.X</span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 31 × 2
-   P.Glucose.minus5.OGTT Insulin.minus5.OGTT
-                   &lt;dbl&gt;               &lt;dbl&gt;
- 1                   5.1                53.5
- 2                   5.6                90.3
- 3                   5                  20.8
- 4                   5.3                52.1
- 5                   5.6                44.4
- 6                   5.8                32.6
- 7                   5.1                38.2
- 8                   5.3                30.6
- 9                   5                  28.5
-10                   5.5                35.4
+   P.Glucose.minus5.OGTT Insulin.minus5.OGTT.X
+                   &lt;dbl&gt;                 &lt;dbl&gt;
+ 1                   5.1                  53.5
+ 2                   5.6                  90.3
+ 3                   5                    20.8
+ 4                   5.3                  52.1
+ 5                   5.6                  44.4
+ 6                   5.8                  32.6
+ 7                   5.1                  38.2
+ 8                   5.3                  30.6
+ 9                   5                    28.5
+10                   5.5                  35.4
 # ℹ 21 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>post_meal_data <span class="sc">|&gt;</span></span>
@@ -648,6 +656,108 @@ Figure&nbsp;4: BMI by area under curve glucose
  9     9  26.4   1.83   87.9    54
 10    10  24.5   1.72   72.2    52
 # ℹ 21 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="filter-by-rows" class="level2">
+<h2 class="anchored" data-anchor-id="filter-by-rows">Filter by rows</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>small_post_meal_data <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(glykemi <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 7
+     id   Age   BMI Group auc_pg auc_ins glykemi
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1    15    48  24.7 FDR     912.  18432.       1
+2    19    30  33.4 CTR     956.  47198.       1
+3    20    46  30.7 CTR     811.  43320.       1
+4    22    51  30.5 CTR     959.  53492.       1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>small_post_meal_data <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(BMI <span class="sc">&gt;=</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 19 × 7
+      id   Age   BMI Group auc_pg auc_ins glykemi
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1    50  27.5 FDR     806.  28728.       0
+ 2     2    51  33.7 FDR     944.  42243.       0
+ 3     3    43  26.3 FDR     694.   7108.       0
+ 4     4    55  25.9 FDR     731.  37593.       0
+ 5     5    53  29.4 FDR    1004.  33863.       0
+ 6     9    54  26.4 FDR     848.  24426.       0
+ 7    11    47  27.9 FDR     764.  23176.       0
+ 8    16    52  27.5 FDR     824.  36487.       0
+ 9    17    51  29.7 CTR     834.  39020.       0
+10    19    30  33.4 CTR     956.  47198.       1
+11    20    46  30.7 CTR     811.  43320.       1
+12    21    34  28.7 CTR     720.  24708.       0
+13    22    51  30.5 CTR     959.  53492.       1
+14    23    53  28.9 CTR     773.  24246.       0
+15    24    36  26.2 CTR     678.  16162.       0
+16    26    35  25.1 CTR     823.  19637.       0
+17    27    37  27.8 CTR     842.  21189.       0
+18    29    40  31.8 CTR     783.  29644.       0
+19    31    33  27.4 CTR     786.  43337.       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>small_post_meal_data <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Group <span class="sc">==</span> <span class="st">"CTR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 7
+      id   Age   BMI Group auc_pg auc_ins glykemi
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1    17    51  29.7 CTR     834.  39020.       0
+ 2    18    51  21.2 CTR     787.  12343.       0
+ 3    19    30  33.4 CTR     956.  47198.       1
+ 4    20    46  30.7 CTR     811.  43320.       1
+ 5    21    34  28.7 CTR     720.  24708.       0
+ 6    22    51  30.5 CTR     959.  53492.       1
+ 7    23    53  28.9 CTR     773.  24246.       0
+ 8    24    36  26.2 CTR     678.  16162.       0
+ 9    25    30  21.2 CTR     735.  23830.       0
+10    26    35  25.1 CTR     823.  19637.       0
+11    27    37  27.8 CTR     842.  21189.       0
+12    28    49  20.2 CTR     757.  17985.       0
+13    29    40  31.8 CTR     783.  29644.       0
+14    30    34  20.8 CTR     763.  16591.       0
+15    31    33  27.4 CTR     786.  43337.       0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>small_post_meal_data <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Group <span class="sc">==</span> <span class="st">"CTR"</span> <span class="sc">&amp;</span> BMI <span class="sc">&gt;=</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 7
+      id   Age   BMI Group auc_pg auc_ins glykemi
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1    17    51  29.7 CTR     834.  39020.       0
+ 2    19    30  33.4 CTR     956.  47198.       1
+ 3    20    46  30.7 CTR     811.  43320.       1
+ 4    21    34  28.7 CTR     720.  24708.       0
+ 5    22    51  30.5 CTR     959.  53492.       1
+ 6    23    53  28.9 CTR     773.  24246.       0
+ 7    24    36  26.2 CTR     678.  16162.       0
+ 8    26    35  25.1 CTR     823.  19637.       0
+ 9    27    37  27.8 CTR     842.  21189.       0
+10    29    40  31.8 CTR     783.  29644.       0
+11    31    33  27.4 CTR     786.  43337.       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>small_post_meal_data <span class="sc">|&gt;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Group <span class="sc">==</span> <span class="st">"CTR"</span> <span class="sc">|</span> BMI <span class="sc">&gt;=</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 23 × 7
+      id   Age   BMI Group auc_pg auc_ins glykemi
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1     1    50  27.5 FDR     806.  28728.       0
+ 2     2    51  33.7 FDR     944.  42243.       0
+ 3     3    43  26.3 FDR     694.   7108.       0
+ 4     4    55  25.9 FDR     731.  37593.       0
+ 5     5    53  29.4 FDR    1004.  33863.       0
+ 6     9    54  26.4 FDR     848.  24426.       0
+ 7    11    47  27.9 FDR     764.  23176.       0
+ 8    16    52  27.5 FDR     824.  36487.       0
+ 9    17    51  29.7 CTR     834.  39020.       0
+10    18    51  21.2 CTR     787.  12343.       0
+# ℹ 13 more rows</code></pre>
 </div>
 </div>
 </section>
