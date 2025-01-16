@@ -199,9 +199,11 @@ small_post_meal_data |>
 ## Modify or change column
 
 ```{r}
-tidier_post_meal_data |> 
-    mutate(insulin_glucose_ratio = auc_insulin / auc_glucose,
-           Group = if_else(Group == "CTR", "Control", "First-degree relative"))
+tidier_post_meal_data |>
+  mutate(
+    insulin_glucose_ratio = auc_insulin / auc_glucose,
+    Group = if_else(Group == "CTR", "Control", "First-degree relative")
+  )
 ```
 ## practice with filter and mutate
 
@@ -215,44 +217,86 @@ post_meal_data |> filter(BMI >= 20 & BMI <= 40 & Group == "FDR")
 Create a percent_body_fat column with mutate() by dividing the Fat.mass.DXA by the Weight, then multiplying by 100. Hint: In R, use * to multiply and / to divide. Then pipe to filter() to find out how many participants have a percent_body_fat greater than 30.
  
 ```{r}
-post_meal_data |> 
-    mutate(percent_body_fat = Fat.mass.DXA / Weight * 100) |> filter(percent_body_fat > 30)
+post_meal_data |>
+  mutate(percent_body_fat = Fat.mass.DXA / Weight * 100) |>
+  filter(percent_body_fat > 30)
 ```
 
 ## Visualising with jitter plot
 
 ```{r}
 tidied_post_meal_data |>
-    mutate(overweight = if_else(BMI >= 25, "Overweight", "Not overweight")) |>
-    ggplot(aes(x = overweight, y = insulin_glucose_ratio)) + 
-    geom_jitter()
+  mutate(overweight = if_else(BMI >= 25, "Overweight", "Not overweight")) |>
+  ggplot(aes(x = overweight, y = insulin_glucose_ratio)) +
+  geom_jitter()
 ```
 ## Plotting three or more variables
 
 ```{r}
 tidied_post_meal_data |>
-    filter(BMI <30) |>
-    ggplot(aes(x = Age, y = auc_insulin, colour = Group)) + geom_point()
+  filter(BMI < 30) |>
+  ggplot(aes(x = Age, y = auc_insulin, colour = Group)) +
+  geom_point()
 ```
 ```{r}
 tidied_post_meal_data |>
-    filter(BMI < 30) |>
-    mutate(young = if_else(Age < 40, "Young", "Old")) |>
-    ggplot(aes(x=BMI, y = insulin_glucose_ratio, colour = Group)) + geom_point() + facet_grid(cols = vars(young))
+  filter(BMI < 30) |>
+  mutate(young = if_else(Age < 40, "Young", "Old")) |>
+  ggplot(aes(x = BMI, y = insulin_glucose_ratio, colour = Group)) +
+  geom_point() +
+  facet_grid(cols = vars(young))
 ```
 ```{r}
 tidied_post_meal_data |>
-    filter(BMI < 30) |>
-    mutate(young = if_else(Age < 40, "Young", "Old")) |>
-    ggplot(aes(x=BMI, y = insulin_glucose_ratio, colour = Group)) + geom_point() + facet_grid(rows = vars(young))
+  filter(BMI < 30) |>
+  mutate(young = if_else(Age < 40, "Young", "Old")) |>
+  ggplot(aes(x = BMI, y = insulin_glucose_ratio, colour = Group)) +
+  geom_point() +
+  facet_grid(rows = vars(young))
 ```
 ```{r}
 tidied_post_meal_data |>
-    filter(BMI < 30) |>
-    mutate(young = if_else(Age < 40, "Young", "Old")) |>
-    ggplot(aes(x=BMI, y = insulin_glucose_ratio, colour = Group)) + geom_point() + facet_grid(rows = vars(young)) +
-        labs(
-        x = "Body Mass Index (BMI)",
-        y = "Insulin to glucose ratio"
-        )
+  filter(BMI < 30) |>
+  mutate(young = if_else(Age < 40, "Young", "Old")) |>
+  ggplot(aes(x = BMI, y = insulin_glucose_ratio, colour = Group)) +
+  geom_point() +
+  facet_grid(rows = vars(young)) +
+  labs(
+    x = "Body Mass Index (BMI)",
+    y = "Insulin to glucose ratio"
+  )
+```
+## Make multi-dimensional plots!
+
+Show the distribution of percent_body_fat by Group and Age category following these steps:
+1. Create a new column called percent_body_fat that calculates the percentage of body fat by dividing Fat.mass.DXA by Weight and multiplying by 100. You wrote this code previously in another exercise, you can re-use that code if you would like.
+2. Create a new column called young that groups people into two categories of being above ("Old") or below ("Young") 40 years of age by using if_else().
+3. Use ggplot() and aes() to create the plot by putting Group on the x-axis, percent_body_fat on the y-axis, and colour the points by young. Use geom_jitter() to show the data points. The argument width = 0.2 has already been set for you to have the points cluster together a bit more
+
+```{r}
+post_meal_data |>
+  mutate(percent_body_fat = Fat.mass.DXA / Weight * 100, young = if_else(Age < 40, "Young", "Old")) |>
+  ggplot(aes(x = Group, y = percent_body_fat, colour = young)) +
+  geom_jitter(width = 0.2)
+```
+
+
+Show the relationship between BMI and bone mineral density, splitting it by insulin sensitivity by following these steps:
+1. A new column called insulin_glucose_ratio has already been included in the template for you to use. Below this code, create a new column called insulin_insensitive that groups people into two categories of being above ("Insensitive") or below ("Sensitive") the mean() of insulin_glucose_ratio by using if_else().
+2. Use ggplot() and aes() to create the plot by putting BMI on the x-axis, Bone.mineral.DXA on the y-axis, and colour the points by insulin_insensitive.
+3. Use geom_point() to show the data points, then also use geom_smooth() to show a line of best fit.
+4. Use facet_grid() to split the plot by insulin_insensitive.
+
+```{r}
+post_meal_data |>
+  mutate(
+    insulin_glucose_ratio = (auc_ins / auc_pg),
+    insulin_insensitive = if_else(
+      insulin_glucose_ratio > mean(insulin_glucose_ratio), "Insensitive", "Sensitive"
+    )
+  ) |>
+  ggplot(aes(x = BMI, y = Bone.mineral.DXA, colour = insulin_insensitive)) +
+  geom_point() +
+  geom_smooth() +
+  facet_grid(cols = vars(insulin_insensitive))
 ```
