@@ -338,6 +338,22 @@ tidied_post_meal_data |>
   ) |>
   ungroup()
 ```
-NB: Remember to always ungroup() after using Group_by() as the grouping is retained
+NB: Remember to always ungroup() after using group_by() as the grouping is retained
 
+## making tables
+
+```{r}
+#| label: tbl-mean-age-bmi
+#| tbl-cap: "Mean of age and BMI across groups"
+tidied_post_meal_data |>
+  group_by(Group) |>
+  summarise(
+    "Mean age (yrs)" = round(mean(Age),digits=1),
+    "Mean BMI (kg/m^2^)"= round(mean(BMI),digits=1)
+  ) |>
+  ungroup() |>
+    knitr::kable()
+    
+```
+For more information, see @tbl-mean-age-bmi
 
